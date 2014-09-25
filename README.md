@@ -1,6 +1,6 @@
 # S3Utils
 
-TODO: Write a gem description
+Simple s3 modules in order to download, upload, copy and delete the file in s3.
 
 ## Installation
 
