@@ -9,8 +9,15 @@ module S3Utils
     def bucket_name
       return '' if @path.to_s == '.'
 
-      ele = @path.to_s.split(Pathname::SEPARATOR_PAT)
-      ele.first.to_s.empty? ? ele[1] : ele[0]
+      element.first.to_s.empty? ? element[1] : element[0]
+    end
+
+    def path_without_bucket
+      File.join(element.drop(1))
+    end
+
+    def element
+      @element ||= @path.to_s.split(Pathname::SEPARATOR_PAT)
     end
   end
 end
