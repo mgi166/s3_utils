@@ -56,6 +56,12 @@ describe S3Utils::Path do
         expect(path('').bucket_name).to be_empty
       end
     end
+
+    context 'when the path is "."' do
+      it 'returns the empty' do
+        expect(path('.').bucket_name).to be_empty
+      end
+    end
   end
 
   describe '#path_without_bucket' do
@@ -90,6 +96,12 @@ describe S3Utils::Path do
     context 'when the path is empty string' do
       it 'returns the empty' do
         expect(path('').path_without_bucket).to be_empty
+      end
+    end
+
+    context 'when the path is "."' do
+      it 'returns the empty' do
+        expect(path('.').path_without_bucket).to be_empty
       end
     end
   end

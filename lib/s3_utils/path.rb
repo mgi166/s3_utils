@@ -6,13 +6,13 @@ module S3Utils
     extend Forwardable
 
     def initialize(path)
-      @path = Pathname.new(path).cleanpath
+      @path = Pathname.new(path)
     end
 
     def_delegators :@path, :basename, :directory?, :file?
 
     def bucket_name
-      return '' if @path.to_s == '.'
+      return '' if @path.to_s.empty? || @path.to_s == '.'
 
       element[0].to_s.empty? ? element[1] : element[0]
     end
@@ -23,7 +23,7 @@ module S3Utils
     end
 
     def element
-      @element ||= @path.to_s.split(Pathname::SEPARATOR_PAT)
+      @element ||= @path.cleanpath.to_s.split(Pathname::SEPARATOR_PAT)
     end
 
     def end_with?(suffix)
