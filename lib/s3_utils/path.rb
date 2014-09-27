@@ -9,7 +9,7 @@ module S3Utils
     def bucket_name
       return '' if @path.to_s == '.'
 
-      element.first.to_s.empty? ? element[1] : element[0]
+      element[0].to_s.empty? ? element[1] : element[0]
     end
 
     def path_without_bucket
