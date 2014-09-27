@@ -13,7 +13,8 @@ module S3Utils
     end
 
     def path_without_bucket
-      File.join(element.drop(1))
+      ele = element.drop_while(&:empty?).drop(1)
+      File.join(ele)
     end
 
     def element

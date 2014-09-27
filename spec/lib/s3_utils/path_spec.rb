@@ -59,5 +59,38 @@ describe S3Utils::Path do
   end
 
   describe '#path_without_bucket' do
+    it 'returns the dirname without bucket' do
+      expect(path('bucket/fuga/hoge').path_without_bucket).to eq('fuga/hoge')
+    end
+
+    context 'when the path includes "//"' do
+      it 'returns the first of dirname' do
+        expect(path('bucket//fuga/hoge').path_without_bucket).to eq('fuga/hoge')
+      end
+    end
+
+    context 'when the path includes ".."' do
+      it 'returns the first of dirname with cleanpath' do
+        expect(path('bucket/../fuga/hoge').path_without_bucket).to eq('hoge')
+      end
+    end
+
+    context 'when the path includes "."' do
+      it 'returns the first of dirname with cleanpath' do
+        expect(path('./bucket/./fuga/hoge').path_without_bucket).to eq('fuga/hoge')
+      end
+    end
+
+    context 'when the path starts with "/"' do
+      it 'returns the first of dirname removed the "/"' do
+        expect(path('/bucket/fuga/hoge').path_without_bucket).to eq('fuga/hoge')
+      end
+    end
+
+    context 'when the path is empty string' do
+      it 'returns the empty' do
+        expect(path('').path_without_bucket).to be_empty
+      end
+    end
   end
 end
