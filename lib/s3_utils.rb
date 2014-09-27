@@ -2,11 +2,10 @@ require 'aws-sdk'
 
 module S3Utils
   def upload_to_s3(src, dest)
-    bucket_name = dest.split('/').first
+    d_path = Path.new(dest)
 
-    upload_path = File.join(dest.split('/').drop(1), File.basename(src))
-    object = bucket(bucket_name).objects[upload_path]
-    object.write(:file => src)
+    objects = bucket(d_path.bucket_name).objects[d_path.path_without_bucket]
+    objects.write(:file => src)
   end
 
   private
