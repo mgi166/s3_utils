@@ -9,7 +9,7 @@ module S3Utils
       @path = Pathname.new(path)
     end
 
-    def_delegators :@path, :basename, :directory?, :file?
+    def_delegators :@path, :basename, :directory?, :file?, :to_s
 
     def bucket_name
       return '' if @path.to_s.empty? || @path.to_s == '.'
