@@ -9,7 +9,7 @@ describe S3Utils do
   end
 
   after(:all) do
-    Process.kill(:TERM, @pid) if @pid
+    Process.kill(:TERM, @pid) rescue nil
   end
 
   describe '#upload_to_s3' do
