@@ -30,7 +30,7 @@ describe S3Utils do
     end
 
     def s3_path(path)
-      path.split('/').drop(1).join('/')
+      path.split('/', -1).drop(1).join('/')
     end
 
     context 'when source is file' do
