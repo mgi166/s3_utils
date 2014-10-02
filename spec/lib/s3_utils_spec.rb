@@ -12,21 +12,36 @@ describe S3Utils do
     Process.kill(:TERM, @pid) rescue nil
   end
 
-  describe '#upload_to_s3' do
+  describe '.upload_to_s3' do
     before do
       AWS.config(s3_endpoint: 'localhost', s3_force_path_style: true, s3_port: 12345, use_ssl: false)
     end
 
+    def read_s3_file(path)
+      bucket  = bucket(path)
+      s3_path = s3_path(path)
+
+      s3 = ::AWS::S3.new
+      s3.buckets[bucket].objects[s3_path].read.chomp
+    end
+
+    def bucket(path)
+      path.split('/', -1).first
+    end
+
+    def s3_path(path)
+      path.split('/').drop(1).join('/')
+    end
+
     context 'when source is file' do
-      subject(:upload_to_s3) do
-        klass = Class.new do
-          include S3Utils
-        end.new
+      it 'uploads the dest path' do
+        src = Tempfile.new('src')
+        src.write "hoge\nfuga"
+        src.close
 
-        klass.upload_to_s3('hoge', 'fuga')
-      end
+        S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path')
 
-      it 'description' do
+        expect(read_s3_file('s3.bucket.com/spec/path')).to eq("hoge\nfuga")
       end
     end
   end
