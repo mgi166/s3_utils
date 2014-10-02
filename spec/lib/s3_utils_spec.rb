@@ -46,6 +46,19 @@ describe S3Utils do
         delete_s3_file('s3.bucket.com/spec/path')
       end
 
+      it 'exists the upload file after #upload_to_s3' do
+        src = Tempfile.new('src')
+        src.write "aaa"
+        src.close
+
+        expect do
+          S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path')
+        end.to change {
+          s3 = ::AWS::S3.new
+          s3.buckets['s3.bucket.com'].objects['spec/path'].exists?
+        }.from(false).to(true)
+      end
+
       it 'uploads the dest path' do
         src = Tempfile.new('src')
         src.write "hoge\nfuga"
