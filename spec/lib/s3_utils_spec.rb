@@ -25,6 +25,14 @@ describe S3Utils do
       s3.buckets[bucket].objects[s3_path].read.chomp
     end
 
+    def delete_s3_file(path)
+      bucket  = bucket(path)
+      s3_path = s3_path(path)
+
+      s3 = ::AWS::S3.new
+      s3.buckets[bucket].objects[s3_path].delete
+    end
+
     def bucket(path)
       path.split('/', -1).first
     end
@@ -34,6 +42,10 @@ describe S3Utils do
     end
 
     context 'when source is file' do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path')
+      end
+
       it 'uploads the dest path' do
         src = Tempfile.new('src')
         src.write "hoge\nfuga"
