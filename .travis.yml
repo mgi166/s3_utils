@@ -5,3 +5,6 @@ rvm:
 branches:
   only:
     - master
+env:
+  - AWS_ACCESS_KEY_ID=xxxx
+  - AWS_SECRET_ACCESS_KEY=yyyy
