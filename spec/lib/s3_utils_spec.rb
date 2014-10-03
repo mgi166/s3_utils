@@ -56,7 +56,7 @@ describe S3Utils do
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "hogehoge" }
 
-        S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path/')
+        S3Utils.upload_to_s3(File.join(@dir, '1.txt'), 's3.bucket.com/spec/path/')
 
         expect(
           read_s3_file('s3.bucket.com/spec/path/1.txt')
