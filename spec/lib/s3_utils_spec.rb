@@ -21,7 +21,7 @@ describe S3Utils do
   end
 
   describe '.upload_to_s3' do
-    context 'when source is file' do
+    context 'when source is file(not dest path end with "/")' do
       before do
         delete_s3_file('s3.bucket.com/spec/path')
       end
@@ -44,6 +44,23 @@ describe S3Utils do
         expect(
           read_s3_file('s3.bucket.com/spec/path')
         ).to eq("hoge\nfuga")
+      end
+    end
+
+    context 'when source is file(and dest path end with "/")' do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path')
+      end
+
+      it 'description' do
+        @dir = Dir.mktmpdir
+        File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "hogehoge" }
+
+        S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path/')
+
+        expect(
+          read_s3_file('s3.bucket.com/spec/path/1.txt')
+        ).to eq('hogehoge')
       end
     end
 
