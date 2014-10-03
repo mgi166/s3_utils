@@ -15,7 +15,7 @@ describe S3Utils do
 
   def create_tempfile(string)
     src = Tempfile.new('src')
-    src.write "hoge\nfuga"
+    src.write(string)
     src.close
     src
   end
