@@ -52,7 +52,7 @@ describe S3Utils do
         delete_s3_file('s3.bucket.com/spec/path')
       end
 
-      it 'description' do
+      it 'uploads the file to under the dest path' do
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "hogehoge" }
 
