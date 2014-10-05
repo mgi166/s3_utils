@@ -15,8 +15,7 @@ module S3Utils
         objects.write(:file => src)
       else
         s_path.dir_glob.each do |file|
-          p = File.join(d_path.path_without_bucket, file)
-          upload_path = Pathname.new(p).cleanpath
+          upload_path = d_path.join_with_dir(file)
           objects = bucket(d_path.bucket_name).objects[upload_path]
           objects.write(:file => file)
         end
