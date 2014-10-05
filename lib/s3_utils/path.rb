@@ -35,7 +35,7 @@ module S3Utils
     end
 
     def join_with_dir(path)
-      File.join(self.path_without_bucket, path)
+      File.join(self.path_without_bucket, path.to_s)
     end
   end
 end

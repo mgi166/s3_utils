@@ -123,4 +123,12 @@ describe S3Utils::Path do
       end
     end
   end
+
+  describe '#join_with_dir' do
+    it 'returns the String with path_without_bucket + the argument' do
+      expect(
+        path('bucket/path').join_with_dir('hoge/fuga.txt')
+      ).to eq('path/hoge/fuga.txt')
+    end
+  end
 end
