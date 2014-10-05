@@ -126,10 +126,20 @@ describe S3Utils::Path do
   end
 
   describe '#join_with_dir' do
-    it 'returns the String with path_without_bucket + the argument' do
-      expect(
-        path('bucket/path').join_with_dir('hoge/fuga.txt')
-      ).to eq('path/hoge/fuga.txt')
+    context 'when the String is not include ".."' do
+      it 'returns the String with path_without_bucket + the argument' do
+        expect(
+          path('bucket/path').join_with_dir('hoge/fuga.txt')
+        ).to eq('path/hoge/fuga.txt')
+      end
+    end
+
+    context 'when the String is include ".."' do
+      it 'returns the String with path_without_bucket + the argument' do
+        expect(
+          path('bucket/path').join_with_dir('hoge/../fuga.txt')
+        ).to eq('path/fuga.txt')
+      end
     end
   end
 

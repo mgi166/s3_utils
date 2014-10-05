@@ -35,7 +35,8 @@ module S3Utils
     end
 
     def join_with_dir(path)
-      File.join(self.path_without_bucket, path.to_s)
+      path = File.join(self.path_without_bucket, path.to_s)
+      Pathname.new(path).cleanpath.to_s
     end
 
     def dir_glob
