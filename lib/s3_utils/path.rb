@@ -37,5 +37,15 @@ module S3Utils
     def join_with_dir(path)
       File.join(self.path_without_bucket, path.to_s)
     end
+
+    def dir_glob
+      if self.directory?
+        Dir[File.join(self.to_s, '**', '*')].reject do |path|
+          File.directory?(path)
+        end
+      else
+        Dir[self.to_s]
+      end
+    end
   end
 end

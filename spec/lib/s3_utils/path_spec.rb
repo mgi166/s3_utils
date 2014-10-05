@@ -1,3 +1,4 @@
+require 'tmpdir'
 
 describe S3Utils::Path do
   def path(p)
@@ -129,6 +130,38 @@ describe S3Utils::Path do
       expect(
         path('bucket/path').join_with_dir('hoge/fuga.txt')
       ).to eq('path/hoge/fuga.txt')
+    end
+  end
+
+  describe '#dir_glob' do
+    context 'when the argument is directory' do
+      before do
+        @tmpdir = Dir.mktmpdir
+        FileUtils.mkdir("#{@tmpdir}/spec")
+        FileUtils.touch("#{@tmpdir}/spec/abc.txt")
+        FileUtils.touch("#{@tmpdir}/spec/def.txt")
+      end
+
+      it 'returns the file list in the directory' do
+        expect(
+          path(@tmpdir).dir_glob
+        ).to eq(["#{@tmpdir}/spec/abc.txt", "#{@tmpdir}/spec/def.txt"])
+      end
+    end
+
+    context 'when the argument is not directory' do
+      before do
+        @tmpdir = Dir.mktmpdir
+        FileUtils.mkdir("#{@tmpdir}/spec")
+        FileUtils.touch("#{@tmpdir}/spec/abc.txt")
+        FileUtils.touch("#{@tmpdir}/spec/def.txt")
+      end
+
+      it 'return the fnmatch file list' do
+        expect(
+          path("#{@tmpdir}/spec/abc*").dir_glob
+        ).to eq(["#{@tmpdir}/spec/abc.txt"])
+      end
     end
   end
 end
