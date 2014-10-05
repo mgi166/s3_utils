@@ -29,5 +29,13 @@ module S3Utils
     def end_with?(suffix)
       @path.to_s.end_with?(suffix)
     end
+
+    def join_basename(path)
+      File.join(self.path_without_bucket, File.basename(path.to_s))
+    end
+
+    def join_with_dir(path)
+      File.join(self.path_without_bucket, path)
+    end
   end
 end

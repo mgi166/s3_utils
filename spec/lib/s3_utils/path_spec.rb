@@ -105,4 +105,22 @@ describe S3Utils::Path do
       end
     end
   end
+
+  describe '#join_basename' do
+    context 'when the Argument is S3Utils::Path instance' do
+      it 'returns the String with path_without_bucket + the argument basename' do
+        expect(
+          path('bucket/path').join_basename(path('hoge/fuga.txt'))
+        ).to eq('path/fuga.txt')
+      end
+    end
+
+    context 'when the Argument is String' do
+      it 'returns the String with path_without_bucket + the argument basename' do
+        expect(
+          path('bucket/path').join_basename('hoge/fuga.txt')
+        ).to eq('path/fuga.txt')
+      end
+    end
+  end
 end
