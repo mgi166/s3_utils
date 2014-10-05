@@ -15,17 +15,19 @@ module S3Utils
         objects.write(:file => src)
       end
 
-      if s_path.directory?
-        upload_targets = Dir[File.join(s_path.to_s, '**', '*')].reject do |path|
-          File.directory?(path)
-        end
+      upload_targets = unless s_path.directory?
+                         Dir[s_path.to_s]
+                       else
+                         Dir[File.join(s_path.to_s, '**', '*')].reject do |path|
+                           File.directory?(path)
+                         end
+                       end
 
-        upload_targets.each do |file|
-          p = File.join(d_path.path_without_bucket, file)
-          upload_path = Pathname.new(p).cleanpath
-          objects = bucket(d_path.bucket_name).objects[upload_path]
-          objects.write(:file => file)
-        end
+      upload_targets.each do |file|
+        p = File.join(d_path.path_without_bucket, file)
+        upload_path = Pathname.new(p).cleanpath
+        objects = bucket(d_path.bucket_name).objects[upload_path]
+        objects.write(:file => file)
       end
     end
 

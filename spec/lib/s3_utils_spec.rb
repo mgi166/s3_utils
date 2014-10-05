@@ -83,5 +83,30 @@ describe S3Utils do
         ).to eq('The two')
       end
     end
+
+    context 'when source includes "*"' do
+      before do
+        @dir = Dir.mktmpdir
+        File.open(File.join(@dir, 'abc1.txt'), 'w') {|f| f.puts "The abc1" }
+        File.open(File.join(@dir, 'def1.txt'), 'w') {|f| f.puts "The def" }
+        File.open(File.join(@dir, 'abc2.txt'), 'w') {|f| f.puts "The abc2" }
+      end
+
+      it "uploads the fmatch file and doesn't upload not fmatch file" do
+        S3Utils.upload_to_s3("{#@dir}/abc*.txt", 's3.bucket.com/spec/path')
+
+        expect(
+          read_s3_file("s3.bucket.com/spec/path/#{@dir}/abc1.txt")
+        ).to eq('The abc1')
+
+        expect(
+          read_s3_file("s3.bucket.com/spec/path/#{@dir}/abc2.txt")
+        ).to eq('The abc2')
+
+        expect(
+          s3_objects("s3.bucket.com/spec/path/#{@dir}/def1").exists?
+        ).to be_falsy
+      end
+    end
   end
 end
