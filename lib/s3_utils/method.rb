@@ -6,7 +6,7 @@ module S3Utils
 
       if s_path.file?
         upload_path = if d_path.end_with?('/')
-                        d_path.join_basename(s3_path)
+                        d_path.join_basename(s_path)
                       else
                         d_path.path_without_bucket
                       end
