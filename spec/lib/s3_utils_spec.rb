@@ -96,7 +96,7 @@ describe S3Utils do
         File.open(File.join(@dir, 'abc2.txt'), 'w') {|f| f.puts "The abc2" }
       end
 
-      it "uploads the fmatch file and doesn't upload not fmatch file" do
+      it "uploads the fnmatch file and doesn't upload not fmatch file" do
         S3Utils.upload_to_s3("{#@dir}/abc*.txt", 's3.bucket.com/spec/path')
 
         expect(

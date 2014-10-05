@@ -167,7 +167,7 @@ describe S3Utils::Path do
         FileUtils.touch("#{@tmpdir}/spec/def.txt")
       end
 
-      it 'return the fnmatch file list' do
+      it 'returns the fnmatch file list' do
         expect(
           path("#{@tmpdir}/spec/abc*").dir_glob
         ).to eq(["#{@tmpdir}/spec/abc.txt"])
