@@ -66,6 +66,8 @@ describe S3Utils do
 
     context 'when source is directory' do
       before do
+        delete_s3_file('s3.bucket.com/spec/path')
+
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "The one" }
         File.open(File.join(@dir, '2.txt'), 'w') {|f| f.puts "The two" }
@@ -86,6 +88,8 @@ describe S3Utils do
 
     context 'when source includes "*"' do
       before do
+        delete_s3_file('s3.bucket.com/spec/path')
+
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, 'abc1.txt'), 'w') {|f| f.puts "The abc1" }
         File.open(File.join(@dir, 'def1.txt'), 'w') {|f| f.puts "The def" }
