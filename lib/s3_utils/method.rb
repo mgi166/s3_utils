@@ -22,6 +22,21 @@ module S3Utils
       end
     end
 
+    def download_from_s3(src, dest)
+      s_path = Path.new(src)
+      d_path = Path.new(dest)
+
+      if d_path.directory?
+        objects = bucket(s_path.bucket_name).objects[s_path.path_without_bucket]
+        download_path = File.join(d_path.to_s, s_path.basename)
+        File.open(download_path, 'w') do |f|
+          objects.read do |chunk|
+            f.write(chunk)
+          end
+        end
+      end
+    end
+
     private
 
     def s3

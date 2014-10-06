@@ -113,4 +113,19 @@ describe S3Utils do
       end
     end
   end
+
+  describe '.download_from_s3' do
+    context 'when dest path is directory' do
+      before do
+        create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
+        @dir = Dir.mktmpdir
+      end
+
+      it 'downloads the file in the directory' do
+        S3Utils.download_from_s3('s3.bucket.com/spec/path/hoge.txt', @dir)
+
+        expect(File.read("#{@dir}/hoge.txt")).to eq('hoge')
+      end
+    end
+  end
 end
