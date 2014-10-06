@@ -7,6 +7,18 @@ module S3Helper
     s3_objects(path).delete
   end
 
+  def create_s3_file(path, &block)
+    @tmp = Tempfile.new('')
+
+    File.open(@tmp, "w") do |f|
+      yield f
+    end
+
+    s3_objects(path).write(file: @tmp.path)
+    rescue
+    @tmp.close!
+  end
+
   def s3_objects(path)
     bucket  = bucket(path)
     s3_path = s3_path(path)
