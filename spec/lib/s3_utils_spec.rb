@@ -117,6 +117,7 @@ describe S3Utils do
   describe '.download_from_s3' do
     context 'when dest path is directory' do
       before do
+        delete_s3_file('s3.bucket.com/spec/path')
         create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
         @dir = Dir.mktmpdir
       end
