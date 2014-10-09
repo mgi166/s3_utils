@@ -128,5 +128,20 @@ describe S3Utils do
         expect(File.read("#{@dir}/hoge.txt")).to eq('hoge')
       end
     end
+
+    context 'when dest path is file' do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path')
+        create_s3_file('s3.bucket.com/spec/path/fuga.txt') {|f| f.write "fuga"}
+        @dir = Dir.mktmpdir
+      end
+
+      it 'downloads the file as local file' do
+        dest_file = File.join(@dir, 'fuga.txt')
+        S3Utils.download_from_s3('s3.bucket.com/spec/path/fuga.txt', dest_file)
+
+        expect(File.read(dest_file)).to eq('fuga')
+      end
+    end
   end
 end

@@ -34,6 +34,13 @@ module S3Utils
             f.write(chunk)
           end
         end
+      else
+        objects = bucket(s_path.bucket_name).objects[s_path.path_without_bucket]
+        File.open(d_path.to_s, 'w') do |f|
+          objects.read do |chunk|
+            f.write(chunk)
+          end
+        end
       end
     end
 
