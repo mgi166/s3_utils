@@ -144,4 +144,19 @@ describe S3Utils do
       end
     end
   end
+
+  describe '.copy_on_s3' do
+    before do
+      delete_s3_file('s3.bucket.com/spec/path')
+      create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
+    end
+
+    it 'copy src object to dest' do
+      S3Utils.copy_on_s3('s3.bucket.com/spec/path/hoge.txt', 's3.bucket.com/spec/path/fuga.txt')
+
+      expect(
+        read_s3_file("s3.bucket.com/spec/path/fuga.txt")
+      ).to eq('hoge')
+    end
+  end
 end
