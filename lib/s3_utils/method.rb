@@ -39,13 +39,10 @@ module S3Utils
     end
 
     def copy_on_s3(src, dest)
-      s_path = Path.new(src)
-      d_path = Path.new(dest)
+      gs = Generator.new(src)
+      gd = Generator.new(dest)
 
-      s_objects = bucket(s_path.bucket_name).objects[s_path.path_without_bucket]
-      d_objects = bucket(d_path.bucket_name).objects[d_path.path_without_bucket]
-
-      s_objects.copy_to(d_objects)
+      gs.s3_objects.copy_to(gd.s3_objects)
     end
 
     private
