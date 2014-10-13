@@ -165,12 +165,30 @@ describe S3Utils do
       create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
     end
 
-    it 'delete the argument file on s3' do
+    it 'deletes the argument file on s3' do
       expect do
         S3Utils.delete_s3_file('s3.bucket.com/spec/path/hoge.txt')
       end.to change {
         s3_objects('s3.bucket.com/spec/path/hoge.txt').exists?
       }.from(true).to(false)
+    end
+  end
+
+  describe '.create_s3_file' do
+    before do
+      delete_s3_file('s3.bucket.com/spec/path')
+    end
+
+    it 'creates the file on s3' do
+      S3Utils.create_s3_file('s3.bucket.com/spec/path/test.txt') do |f|
+        f.puts "aaaa"
+        f.puts "bbbb"
+        f.puts "cccc"
+      end
+
+      expect(
+        read_s3_file('s3.bucket.com/spec/path/test.txt')
+      ).to eq("aaaa\nbbbb\ncccc")
     end
   end
 end

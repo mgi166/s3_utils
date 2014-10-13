@@ -49,5 +49,18 @@ module S3Utils
       g = Generator.new(path)
       g.s3_objects.delete
     end
+
+    def create_s3_file(path)
+      g = Generator.new(path)
+      @tmp = Tempfile.new('')
+
+      File.open(@tmp, "w") do |f|
+        yield f
+      end
+
+      g.s3_objects.write(file: @tmp.path)
+    ensure
+      @tmp.close!
+    end
   end
 end
