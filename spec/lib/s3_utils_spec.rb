@@ -175,20 +175,40 @@ describe S3Utils do
   end
 
   describe '.create_s3_file' do
-    before do
-      delete_s3_file('s3.bucket.com/spec/path')
-    end
-
-    it 'creates the file on s3' do
-      S3Utils.create_s3_file('s3.bucket.com/spec/path/test.txt') do |f|
-        f.puts "aaaa"
-        f.puts "bbbb"
-        f.puts "cccc"
+    context "when the file doesn't exist on s3" do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path')
       end
 
-      expect(
-        read_s3_file('s3.bucket.com/spec/path/test.txt')
-      ).to eq("aaaa\nbbbb\ncccc")
+      it 'creates the file on s3' do
+        S3Utils.create_s3_file('s3.bucket.com/spec/path/test.txt') do |f|
+          f.puts "aaaa"
+          f.puts "bbbb"
+          f.puts "cccc"
+        end
+
+        expect(
+          read_s3_file('s3.bucket.com/spec/path/test.txt')
+        ).to eq("aaaa\nbbbb\ncccc")
+      end
+    end
+
+    context 'when the file already exist on s3' do
+      before do
+        create_s3_file('s3.bucket.com/spec/path/test.txt') do |f|
+          f.puts "already exist"
+        end
+      end
+
+      it 'overwrites the contents' do
+        S3Utils.create_s3_file('s3.bucket.com/spec/path/test.txt') do |f|
+          f.puts "overwrite the contents"
+        end
+
+        expect(
+          read_s3_file('s3.bucket.com/spec/path/test.txt')
+        ).to eq("overwrite the contents")
+      end
     end
   end
 end
