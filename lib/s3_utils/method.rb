@@ -51,8 +51,8 @@ module S3Utils
     end
 
     def create_s3_file(path)
-      g = Generator.new(path)
       @tmp = Tempfile.new('')
+      g = Generator.new(path)
 
       File.open(@tmp, "w") do |f|
         yield f
