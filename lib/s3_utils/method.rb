@@ -49,15 +49,5 @@ module S3Utils
       g = Generator.new(path)
       g.s3_objects.delete
     end
-
-    private
-
-    def s3
-      ::AWS::S3.new
-    end
-
-    def bucket(bucket_name)
-      s3.buckets[bucket_name]
-    end
   end
 end
