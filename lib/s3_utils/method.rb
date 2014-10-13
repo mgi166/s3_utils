@@ -1,23 +1,20 @@
 module S3Utils
   module Method
     def upload_to_s3(src, dest)
-      d_path = Path.new(dest)
-      s_path = Path.new(src)
+      g = Generator.new(dest)
 
-      if s_path.file?
-        upload_path = if d_path.end_with?('/')
-                        d_path.join_basename(s_path)
-                      else
-                        d_path.path_without_bucket
-                      end
-
-        objects = bucket(d_path.bucket_name).objects[upload_path]
-        objects.write(:file => src)
+      case
+      when File.file?(src)
+        filename = File.basename(src.to_s) if dest.to_s.end_with?('/')
+        g.s3_objects(filename).write(file: src)
+      when File.directory?(src)
+        Dir[File.join(src, '**', '*')].each do |path|
+          next if File.directory?(path)
+          g.s3_objects(path).write(file: path)
+        end
       else
-        s_path.dir_glob.each do |file|
-          upload_path = d_path.join_with_dir(file)
-          objects = bucket(d_path.bucket_name).objects[upload_path]
-          objects.write(:file => file)
+        Dir[src].each do |path|
+          g.s3_objects(path).write(file: path)
         end
       end
     end
