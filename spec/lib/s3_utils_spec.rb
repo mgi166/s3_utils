@@ -159,4 +159,18 @@ describe S3Utils do
       ).to eq('hoge')
     end
   end
+
+  describe '.delete_s3_file' do
+    before do
+      create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
+    end
+
+    it 'delete the argument file on s3' do
+      expect do
+        S3Utils.delete_s3_file('s3.bucket.com/spec/path/hoge.txt')
+      end.to change {
+        s3_objects('s3.bucket.com/spec/path/hoge.txt').exists?
+      }.from(true).to(false)
+    end
+  end
 end

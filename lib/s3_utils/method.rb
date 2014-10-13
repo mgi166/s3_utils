@@ -45,6 +45,11 @@ module S3Utils
       gs.s3_objects.copy_to(gd.s3_objects)
     end
 
+    def delete_s3_file(path)
+      g = Generator.new(path)
+      g.s3_objects.delete
+    end
+
     private
 
     def s3
