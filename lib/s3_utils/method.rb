@@ -6,15 +6,15 @@ module S3Utils
       case
       when File.file?(src)
         filename = File.basename(src.to_s) if dest.to_s.end_with?('/')
-        g.s3_objects(filename).write(file: src)
+        g.s3_object(filename).write(file: src)
       when File.directory?(src)
         Dir[File.join(src, '**', '*')].each do |path|
           next if File.directory?(path)
-          g.s3_objects(path).write(file: path)
+          g.s3_object(path).write(file: path)
         end
       else
         Dir[src].each do |path|
-          g.s3_objects(path).write(file: path)
+          g.s3_object(path).write(file: path)
         end
       end
     end
@@ -25,13 +25,13 @@ module S3Utils
       if File.directory?(dest)
         download_path = File.join(dest, File.basename(src))
         File.open(download_path, 'w') do |f|
-          g.s3_objects.read do |chunk|
+          g.s3_object.read do |chunk|
             f.write(chunk)
           end
         end
       else
         File.open(dest, 'w') do |f|
-          g.s3_objects.read do |chunk|
+          g.s3_object.read do |chunk|
             f.write(chunk)
           end
         end
@@ -42,12 +42,12 @@ module S3Utils
       gs = Generator.new(src)
       gd = Generator.new(dest)
 
-      gs.s3_objects.copy_to(gd.s3_objects)
+      gs.s3_object.copy_to(gd.s3_object)
     end
 
     def delete_s3_file(path)
       g = Generator.new(path)
-      g.s3_objects.delete
+      g.s3_object.delete
     end
 
     def create_s3_file(path)
@@ -58,7 +58,7 @@ module S3Utils
         yield f
       end
 
-      g.s3_objects.write(file: @tmp.path)
+      g.s3_object.write(file: @tmp.path)
     ensure
       @tmp.close!
     end

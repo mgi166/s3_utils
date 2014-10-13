@@ -4,7 +4,7 @@ module S3Utils
       @path = Path.new(path)
     end
 
-    def s3_objects(path=nil)
+    def s3_object(path=nil)
       base_path = @path.path_without_bucket
       dest_path = path ? File.join(base_path, path) : base_path
       bucket(@path.bucket_name).objects[dest_path]
