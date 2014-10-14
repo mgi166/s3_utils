@@ -1,3 +1,5 @@
+require 'fakes3/server'
+
 describe S3Utils::Generator do
   describe '#s3_object' do
     let(:generator) { S3Utils::Generator.new('bucket/fuga/hoge') }
@@ -27,6 +29,38 @@ describe S3Utils::Generator do
 
       it 'has the bucket' do
         expect(generator.s3_object.bucket).to eq(::AWS::S3.new.buckets['bucket'])
+      end
+    end
+  end
+
+  describe '#s3_object_collection' do
+    let(:generator) { S3Utils::Generator.new('s3.bucket.com/fuga') }
+
+    before(:all) do
+      @pid = fork do
+        FakeS3::Server.new('0.0.0.0', 12345, FakeS3::FileStore.new('/var/tmp/fakes3'), 'localhost').serve
+      end
+      AWS.config(s3_endpoint: 'localhost', s3_force_path_style: true, s3_port: 12345, use_ssl: false)
+    end
+
+    after(:all) do
+      Process.kill(:TERM, @pid) rescue nil
+    end
+
+    context 'when the objects exists in s3' do
+      before do
+        create_s3_file('s3.bucket.com/fuga/hoge.txt') {|f| f.puts '' }
+        create_s3_file('s3.bucket.com/fuga/fuga.txt') {|f| f.puts '' }
+      end
+
+      it 'returns the instance of AWS::S3::ObjectCollection' do
+        expect(generator.s3_object_collection).to be_instance_of AWS::S3::ObjectCollection
+      end
+
+      it 'returns the s3 objects under the directory' do
+        expect(
+          generator.s3_object_collection.to_a
+        ).to eq([S3Utils::Generator.new('s3.bucket.com/fuga/fuga.txt').s3_object, S3Utils::Generator.new('s3.bucket.com/fuga/hoge.txt').s3_object])
       end
     end
   end

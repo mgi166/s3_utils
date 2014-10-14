@@ -10,6 +10,11 @@ module S3Utils
       bucket(@path.bucket_name).objects[dest_path]
     end
 
+    def s3_object_collection(path=nil)
+      base_path = @path.path_without_bucket
+      bucket(@path.bucket_name).objects.with_prefix(base_path)
+    end
+
     def s3
       ::AWS::S3.new
     end
