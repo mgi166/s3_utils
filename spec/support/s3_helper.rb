@@ -1,10 +1,10 @@
 module S3Helper
   def read_s3_file(path)
-    s3_objects(path).read.chomp
+    s3_object(path).read.chomp
   end
 
   def delete_s3_file(path)
-    s3_objects(path).delete
+    s3_object(path).delete
   end
 
   def create_s3_file(path, &block)
@@ -14,12 +14,12 @@ module S3Helper
       yield f
     end
 
-    s3_objects(path).write(file: @tmp.path)
+    s3_object(path).write(file: @tmp.path)
     rescue
     @tmp.close!
   end
 
-  def s3_objects(path)
+  def s3_object(path)
     bucket  = bucket(path)
     s3_path = s3_path(path)
 

@@ -32,7 +32,7 @@ describe S3Utils do
         expect do
           S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path')
         end.to change {
-          s3_objects('s3.bucket.com/spec/path').exists?
+          s3_object('s3.bucket.com/spec/path').exists?
         }.from(false).to(true)
       end
 
@@ -108,7 +108,7 @@ describe S3Utils do
         ).to eq('The abc2')
 
         expect(
-          s3_objects("s3.bucket.com/spec/path/#{@dir}/def1").exists?
+          s3_object("s3.bucket.com/spec/path/#{@dir}/def1").exists?
         ).to be_falsy
       end
     end
@@ -170,7 +170,7 @@ describe S3Utils do
         expect do
           S3Utils.delete_s3_file('s3.bucket.com/spec/path/hoge.txt')
         end.to change {
-          s3_objects('s3.bucket.com/spec/path/hoge.txt').exists?
+          s3_object('s3.bucket.com/spec/path/hoge.txt').exists?
         }.from(true).to(false)
       end
     end
@@ -184,7 +184,7 @@ describe S3Utils do
         expect do
           S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir')
         end.to change {
-          s3_objects('s3.bucket.com/spec/path/dir/hoge.txt').exists?
+          s3_object('s3.bucket.com/spec/path/dir/hoge.txt').exists?
         }.from(true).to(false)
       end
     end
@@ -204,7 +204,7 @@ describe S3Utils do
         expect do
           S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
         end.to_not change {
-          s3_objects('s3.bucket.com/spec/path/dir/hoge.txt').exists?
+          s3_object('s3.bucket.com/spec/path/dir/hoge.txt').exists?
         }.from(false)
       end
     end
