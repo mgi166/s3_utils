@@ -1,15 +1,10 @@
 require 'pathname'
-require 'forwardable'
 
 module S3Utils
   class Path
-    extend Forwardable
-
     def initialize(path)
       @path = Pathname.new(path)
     end
-
-    def_delegators :@path, :basename, :directory?, :file?, :to_s
 
     def bucket_name
       return '' if @path.to_s.empty? || @path.to_s == '.'
