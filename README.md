@@ -1,6 +1,6 @@
 # S3Utils
 
-Simple s3 modules in order to download, upload, copy and delete the file in s3.
+Simple s3 modules in order to download, upload, copy and delete the file on s3.
 
 ## Installation
 
@@ -18,9 +18,27 @@ Or install it yourself as:
 
     $ gem install s3_utils
 
+## dependency
+
+* [aws-sdk](https://github.com/aws/aws-sdk-ruby)
+
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 's3_utils'
+```
+
+### upload
+```ruby
+S3Utils.upload_to_s3("path/to/local_file.txt", "s3.bucket.name/path/to/s3_file.txt")
+```
+
+if the second argument has "/" in the end, upload the directory with local file basename
+
+```ruby
+S3Utils.upload_to_s3("path/to/local_file.txt", "s3.bucket.name/path/to/dir/")
+=> upload to s3.bucket.name/path/to/dir/local_file.txt
+```
 
 ## Contributing
 
