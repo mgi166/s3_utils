@@ -25,28 +25,5 @@ module S3Utils
     def element
       @element ||= @path.cleanpath.to_s.split(Pathname::SEPARATOR_PAT)
     end
-
-    def end_with?(suffix)
-      @path.to_s.end_with?(suffix)
-    end
-
-    def join_basename(path)
-      File.join(self.path_without_bucket, File.basename(path.to_s))
-    end
-
-    def join_with_dir(path)
-      path = File.join(self.path_without_bucket, path.to_s)
-      Pathname.new(path).cleanpath.to_s
-    end
-
-    def dir_glob
-      if self.directory?
-        Dir[File.join(self.to_s, '**', '*')].reject do |path|
-          File.directory?(path)
-        end
-      else
-        Dir[self.to_s]
-      end
-    end
   end
 end
