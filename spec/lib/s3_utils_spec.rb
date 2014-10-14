@@ -188,6 +188,26 @@ describe S3Utils do
         }.from(true).to(false)
       end
     end
+
+    context "when the argument doesn't exist on s3" do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+      end
+
+      it 'returns nil' do
+        expect(
+          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+        ).to be_nil
+      end
+
+      it 'keeps of not existance' do
+        expect do
+          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+        end.to_not change {
+          s3_objects('s3.bucket.com/spec/path/dir/hoge.txt').exists?
+        }.from(false)
+      end
+    end
   end
 
   describe '.create_s3_file' do
