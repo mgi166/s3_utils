@@ -239,4 +239,30 @@ describe S3Utils do
       end
     end
   end
+
+  describe '.read_on_s3' do
+    context 'when the file exists' do
+      before do
+        create_s3_file('s3.bucket.com/spec/path/test.txt') {|f| f.puts "test" }
+      end
+
+      it 'returns the String that the file contains' do
+        expect(
+          S3Utils.read_on_s3('s3.bucket.com/spec/path/test.txt')
+        ).to eq('test')
+      end
+    end
+
+    context "when the file doesn't exists" do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path/test.txt')
+      end
+
+      it 'raises error' do
+        expect do
+          S3Utils.read_on_s3('s3.bucket.com/spec/path/test.txt')
+        end.to raise_error AWS::S3::Errors::NoSuchKey
+      end
+    end
+  end
 end

@@ -64,5 +64,10 @@ module S3Utils
     ensure
       @tmp.close! if @tmp
     end
+
+    def read_on_s3(path)
+      g = Generator.new(path)
+      g.s3_object.read.chomp
+    end
   end
 end
