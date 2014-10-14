@@ -226,5 +226,17 @@ describe S3Utils do
         ).to eq("overwrite the contents")
       end
     end
+
+    context 'when no block given' do
+      before do
+        delete_s3_file('s3.bucket.com/spec/path/test.txt')
+      end
+
+      it 'creates empty file on s3' do
+        S3Utils.create_s3_file('s3.bucket.com/spec/path/test.txt')
+
+        expect(read_s3_file('s3.bucket.com/spec/path/test.txt')).to be_empty
+      end
+    end
   end
 end

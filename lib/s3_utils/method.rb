@@ -1,3 +1,5 @@
+require 'tempfile'
+
 module S3Utils
   module Method
     def upload_to_s3(src, dest)
@@ -55,12 +57,12 @@ module S3Utils
       g = Generator.new(path)
 
       File.open(@tmp, "w") do |f|
-        yield f
+        yield f if block_given?
       end
 
       g.s3_object.write(file: @tmp.path)
     ensure
-      @tmp.close!
+      @tmp.close! if @tmp
     end
   end
 end
