@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = S3Utils::VERSION
   spec.authors       = ["mgi166"]
   spec.email         = ["skskoari@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Simple s3 modules in order to download, upload, copy and delete the file on s3.}
+  spec.description   = %q{Simple s3 modules in order to download, upload, copy and delete the file on s3.}
+  spec.homepage      = "https://github.com/mgi166/s3_utils"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
