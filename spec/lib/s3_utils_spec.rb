@@ -109,7 +109,7 @@ describe S3Utils do
 
         expect(
           s3_object("s3.bucket.com/spec/path/#{@dir}/def1").exists?
-        ).to be_falsy
+        ).to be false
       end
     end
   end
