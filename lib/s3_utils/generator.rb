@@ -15,6 +15,8 @@ module S3Utils
       bucket(@path.bucket_name).objects.with_prefix(base_path)
     end
 
+    private
+
     def s3
       ::AWS::S3.new
     end
