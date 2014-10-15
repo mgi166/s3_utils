@@ -166,6 +166,12 @@ describe S3Utils do
         create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
       end
 
+      it 'returns nil' do
+        expect(
+          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+        ).to be_nil
+      end
+
       it 'deletes the argument file on s3' do
         expect do
           S3Utils.delete_s3_file('s3.bucket.com/spec/path/hoge.txt')
