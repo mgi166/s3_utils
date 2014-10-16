@@ -132,7 +132,7 @@ end
 ### read_on_s3
 Read the file in s3.  
 
-```
+```ruby
 # s3.bucket.com/path/to/file.txt has contents "abcdefg"
 S3Utils.read_on_s3('s3.bucket.com/path/to/file.txt')
 #=> abcdefg
