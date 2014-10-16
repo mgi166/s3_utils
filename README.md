@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/mgi166/s3_utils/badge.png?branch=master)](https://coveralls.io/r/mgi166/s3_utils?branch=master)
 [![Code Climate](https://codeclimate.com/github/mgi166/s3_utils/badges/gpa.svg)](https://codeclimate.com/github/mgi166/s3_utils)
 
 # S3Utils
