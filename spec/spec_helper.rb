@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require 's3_utils'
 require 'support/s3_helper'
 
