@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/mgi166/s3_utils/badges/gpa.svg)](https://codeclimate.com/github/mgi166/s3_utils)
+
 # S3Utils
 
 Simple s3 modules in order to download, upload, copy and delete the file on s3.
