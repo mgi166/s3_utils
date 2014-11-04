@@ -1,6 +1,18 @@
 require 'fakes3/server'
 
 describe S3Utils::Generator do
+  describe '#bucket' do
+    let(:generator) { S3Utils::Generator.new('bucket/fuga/hoge') }
+
+    it 'returns AWS::S3::Bucket instance' do
+      expect(generator.bucket).to be_instance_of AWS::S3::Bucket
+    end
+
+    it 'has names bucket name' do
+      expect(generator.bucket.name).to eq('bucket')
+    end
+  end
+
   describe '#s3_object' do
     let(:generator) { S3Utils::Generator.new('bucket/fuga/hoge') }
 
