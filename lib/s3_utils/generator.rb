@@ -19,6 +19,10 @@ module S3Utils
       bucket.objects.with_prefix(base_path)
     end
 
+    def tree
+      bucket.as_tree(prefix: @path.path_without_bucket)
+    end
+
     private
 
     def s3
