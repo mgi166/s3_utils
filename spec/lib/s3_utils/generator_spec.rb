@@ -65,6 +65,11 @@ describe S3Utils::Generator do
         create_s3_file('s3.bucket.com/fuga/fuga.txt') {|f| f.puts '' }
       end
 
+      after do
+        delete_s3_file('s3.bucket.com/fuga/hoge.txt')
+        delete_s3_file('s3.bucket.com/fuga/fuga.txt')
+      end
+
       it 'returns the instance of AWS::S3::ObjectCollection' do
         expect(generator.s3_object_collection).to be_instance_of AWS::S3::ObjectCollection
       end
@@ -86,6 +91,12 @@ describe S3Utils::Generator do
 
     it 'returns the instance of AWS::S3::Tree' do
       expect(generator.tree).to be_instance_of AWS::S3::Tree
+    end
+
+    it 'returns the tree that has files in the argument directory' do
+      expect(
+        generator.tree.children.map(&:key)
+      ).to eq(['fuga/hoge.txt'])
     end
   end
 end
