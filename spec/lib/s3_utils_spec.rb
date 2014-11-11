@@ -52,6 +52,8 @@ describe S3Utils do
         delete_s3_file('s3.bucket.com/spec/path')
       end
 
+      after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
+
       it 'uploads the file to under the dest path' do
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "hogehoge" }
@@ -72,6 +74,8 @@ describe S3Utils do
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "The one" }
         File.open(File.join(@dir, '2.txt'), 'w') {|f| f.puts "The two" }
       end
+
+      after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
 
       it 'uploads the file with directoy to dest path' do
         S3Utils.upload_to_s3(@dir, 's3.bucket.com/spec/path')
@@ -95,6 +99,8 @@ describe S3Utils do
         File.open(File.join(@dir, 'def1.txt'), 'w') {|f| f.puts "The def" }
         File.open(File.join(@dir, 'abc2.txt'), 'w') {|f| f.puts "The abc2" }
       end
+
+      after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
 
       it "uploads the fnmatch file and doesn't upload not fmatch file" do
         S3Utils.upload_to_s3("{#@dir}/abc*.txt", 's3.bucket.com/spec/path')
@@ -122,6 +128,8 @@ describe S3Utils do
         @dir = Dir.mktmpdir
       end
 
+      after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
+
       it 'downloads the file in the directory' do
         S3Utils.download_from_s3('s3.bucket.com/spec/path/hoge.txt', @dir)
 
@@ -135,6 +143,8 @@ describe S3Utils do
         create_s3_file('s3.bucket.com/spec/path/fuga.txt') {|f| f.write "fuga"}
         @dir = Dir.mktmpdir
       end
+
+      after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
 
       it 'downloads the file as local file' do
         dest_file = File.join(@dir, 'fuga.txt')
@@ -152,6 +162,8 @@ describe S3Utils do
           create_s3_file('s3.bucket.com/spec/path/bazz.txt') {|f| f.write "bazz"}
           @dir = Dir.mktmpdir
         end
+
+        after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
 
         it 'downloads the directory in dest directory' do
           S3Utils.download_from_s3('s3.bucket.com/spec/path', @dir)
