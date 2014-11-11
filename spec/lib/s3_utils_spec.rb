@@ -143,6 +143,22 @@ describe S3Utils do
         expect(File.read(dest_file)).to eq('fuga')
       end
     end
+
+    describe 'when the src is directory' do
+      context 'the dest directory is already exists' do
+        before do
+          delete_s3_file('s3.bucket.com/spec/path')
+          create_s3_file('s3.bucket.com/spec/path/fuga.txt') {|f| f.write "fuga"}
+          create_s3_file('s3.bucket.com/spec/path/bazz.txt') {|f| f.write "bazz"}
+          @dir = Dir.mktmpdir
+        end
+
+        it 'downloads the directory in dest directory' do
+          S3Utils.download_from_s3('s3.bucket.com/spec/path', @dir)
+          expect(Dir["#{@dir}/path/**/*"]).to eq([ "#{@dir}/path/bazz.txt", "#{@dir}/path/fuga.txt"])
+        end
+      end
+    end
   end
 
   describe '.copy_on_s3' do
