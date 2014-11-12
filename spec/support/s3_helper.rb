@@ -3,7 +3,7 @@ module S3Helper
     s3_object(path).read.chomp
   end
 
-  def delete_s3_file(path)
+  def delete_on_s3(path)
     s3_object(path).delete
   end
 

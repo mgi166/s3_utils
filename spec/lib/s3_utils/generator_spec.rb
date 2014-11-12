@@ -66,8 +66,8 @@ describe S3Utils::Generator do
       end
 
       after do
-        delete_s3_file('s3.bucket.com/fuga/hoge.txt')
-        delete_s3_file('s3.bucket.com/fuga/fuga.txt')
+        delete_on_s3('s3.bucket.com/fuga/hoge.txt')
+        delete_on_s3('s3.bucket.com/fuga/fuga.txt')
       end
 
       it 'returns the instance of AWS::S3::ObjectCollection' do

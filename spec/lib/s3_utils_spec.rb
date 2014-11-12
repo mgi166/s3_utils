@@ -23,7 +23,7 @@ describe S3Utils do
   describe '.upload_to_s3' do
     context 'when source is file(not dest path end with "/")' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
       end
 
       it 'exists the upload file after #upload_to_s3' do
@@ -49,7 +49,7 @@ describe S3Utils do
 
     context 'when source is file(and dest path end with "/")' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
       end
 
       after { FileUtils.remove_entry_secure(@dir) if Dir.exist?(@dir) }
@@ -68,7 +68,7 @@ describe S3Utils do
 
     context 'when source is directory' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
 
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, '1.txt'), 'w') {|f| f.puts "The one" }
@@ -92,7 +92,7 @@ describe S3Utils do
 
     context 'when source includes "*"' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
 
         @dir = Dir.mktmpdir
         File.open(File.join(@dir, 'abc1.txt'), 'w') {|f| f.puts "The abc1" }
@@ -123,7 +123,7 @@ describe S3Utils do
   describe '.download_from_s3' do
     context 'when dest path is directory' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
         create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
         @dir = Dir.mktmpdir
       end
@@ -139,7 +139,7 @@ describe S3Utils do
 
     context 'when dest path is file' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
         create_s3_file('s3.bucket.com/spec/path/fuga.txt') {|f| f.write "fuga"}
         @dir = Dir.mktmpdir
       end
@@ -157,7 +157,7 @@ describe S3Utils do
     describe 'when the src is directory' do
       context 'the dest directory is already exists' do
         before do
-          delete_s3_file('s3.bucket.com/spec/path')
+          delete_on_s3('s3.bucket.com/spec/path')
           create_s3_file('s3.bucket.com/spec/path/fuga.txt') {|f| f.write "fuga"}
           create_s3_file('s3.bucket.com/spec/path/bazz.txt') {|f| f.write "bazz"}
           @dir = Dir.mktmpdir
@@ -175,7 +175,7 @@ describe S3Utils do
 
   describe '.copy_on_s3' do
     before do
-      delete_s3_file('s3.bucket.com/spec/path')
+      delete_on_s3('s3.bucket.com/spec/path')
       create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
     end
 
@@ -188,7 +188,7 @@ describe S3Utils do
     end
   end
 
-  describe '.delete_s3_file' do
+  describe '.delete_on_s3' do
     context 'when the argument is file on s3' do
       before do
         create_s3_file('s3.bucket.com/spec/path/hoge.txt') {|f| f.write "hoge"}
@@ -196,13 +196,13 @@ describe S3Utils do
 
       it 'returns nil' do
         expect(
-          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+          S3Utils.delete_on_s3('s3.bucket.com/spec/path/dir/hoge.txt')
         ).to be_nil
       end
 
       it 'deletes the argument file on s3' do
         expect do
-          S3Utils.delete_s3_file('s3.bucket.com/spec/path/hoge.txt')
+          S3Utils.delete_on_s3('s3.bucket.com/spec/path/hoge.txt')
         end.to change {
           s3_object('s3.bucket.com/spec/path/hoge.txt').exists?
         }.from(true).to(false)
@@ -216,7 +216,7 @@ describe S3Utils do
 
       it 'deletes the argument directory on s3' do
         expect do
-          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir')
+          S3Utils.delete_on_s3('s3.bucket.com/spec/path/dir')
         end.to change {
           s3_object('s3.bucket.com/spec/path/dir/hoge.txt').exists?
         }.from(true).to(false)
@@ -225,18 +225,18 @@ describe S3Utils do
 
     context "when the argument doesn't exist on s3" do
       before do
-        delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+        delete_on_s3('s3.bucket.com/spec/path/dir/hoge.txt')
       end
 
       it 'returns nil' do
         expect(
-          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+          S3Utils.delete_on_s3('s3.bucket.com/spec/path/dir/hoge.txt')
         ).to be_nil
       end
 
       it 'keeps of not existance' do
         expect do
-          S3Utils.delete_s3_file('s3.bucket.com/spec/path/dir/hoge.txt')
+          S3Utils.delete_on_s3('s3.bucket.com/spec/path/dir/hoge.txt')
         end.to_not change {
           s3_object('s3.bucket.com/spec/path/dir/hoge.txt').exists?
         }.from(false)
@@ -247,7 +247,7 @@ describe S3Utils do
   describe '.create_s3_file' do
     context "when the file doesn't exist on s3" do
       before do
-        delete_s3_file('s3.bucket.com/spec/path')
+        delete_on_s3('s3.bucket.com/spec/path')
       end
 
       it 'creates the file on s3' do
@@ -283,7 +283,7 @@ describe S3Utils do
 
     context 'when no block given' do
       before do
-        delete_s3_file('s3.bucket.com/spec/path/test.txt')
+        delete_on_s3('s3.bucket.com/spec/path/test.txt')
       end
 
       it 'creates empty file on s3' do
@@ -309,7 +309,7 @@ describe S3Utils do
 
     context "when the file doesn't exists" do
       before do
-        delete_s3_file('s3.bucket.com/spec/path/test.txt')
+        delete_on_s3('s3.bucket.com/spec/path/test.txt')
       end
 
       it 'raises error' do
