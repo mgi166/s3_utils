@@ -42,7 +42,7 @@ describe S3Utils do
         S3Utils.upload_to_s3(src.path, 's3.bucket.com/spec/path')
 
         expect(
-          read_s3_file('s3.bucket.com/spec/path')
+          read_on_s3('s3.bucket.com/spec/path')
         ).to eq("hoge\nfuga")
       end
     end
@@ -61,7 +61,7 @@ describe S3Utils do
         S3Utils.upload_to_s3(File.join(@dir, '1.txt'), 's3.bucket.com/spec/path/')
 
         expect(
-          read_s3_file('s3.bucket.com/spec/path/1.txt')
+          read_on_s3('s3.bucket.com/spec/path/1.txt')
         ).to eq('hogehoge')
       end
     end
@@ -81,11 +81,11 @@ describe S3Utils do
         S3Utils.upload_to_s3(@dir, 's3.bucket.com/spec/path')
 
         expect(
-          read_s3_file("s3.bucket.com/spec/path/#{@dir}/1.txt")
+          read_on_s3("s3.bucket.com/spec/path/#{@dir}/1.txt")
         ).to eq('The one')
 
         expect(
-          read_s3_file("s3.bucket.com/spec/path/#{@dir}/2.txt")
+          read_on_s3("s3.bucket.com/spec/path/#{@dir}/2.txt")
         ).to eq('The two')
       end
     end
@@ -106,11 +106,11 @@ describe S3Utils do
         S3Utils.upload_to_s3("{#@dir}/abc*.txt", 's3.bucket.com/spec/path')
 
         expect(
-          read_s3_file("s3.bucket.com/spec/path/#{@dir}/abc1.txt")
+          read_on_s3("s3.bucket.com/spec/path/#{@dir}/abc1.txt")
         ).to eq('The abc1')
 
         expect(
-          read_s3_file("s3.bucket.com/spec/path/#{@dir}/abc2.txt")
+          read_on_s3("s3.bucket.com/spec/path/#{@dir}/abc2.txt")
         ).to eq('The abc2')
 
         expect(
@@ -183,7 +183,7 @@ describe S3Utils do
       S3Utils.copy_on_s3('s3.bucket.com/spec/path/hoge.txt', 's3.bucket.com/spec/path/fuga.txt')
 
       expect(
-        read_s3_file("s3.bucket.com/spec/path/fuga.txt")
+        read_on_s3("s3.bucket.com/spec/path/fuga.txt")
       ).to eq('hoge')
     end
   end
@@ -258,7 +258,7 @@ describe S3Utils do
         end
 
         expect(
-          read_s3_file('s3.bucket.com/spec/path/test.txt')
+          read_on_s3('s3.bucket.com/spec/path/test.txt')
         ).to eq("aaaa\nbbbb\ncccc")
       end
     end
@@ -276,7 +276,7 @@ describe S3Utils do
         end
 
         expect(
-          read_s3_file('s3.bucket.com/spec/path/test.txt')
+          read_on_s3('s3.bucket.com/spec/path/test.txt')
         ).to eq("overwrite the contents")
       end
     end
@@ -289,7 +289,7 @@ describe S3Utils do
       it 'creates empty file on s3' do
         S3Utils.create_on_s3('s3.bucket.com/spec/path/test.txt')
 
-        expect(read_s3_file('s3.bucket.com/spec/path/test.txt')).to be_empty
+        expect(read_on_s3('s3.bucket.com/spec/path/test.txt')).to be_empty
       end
     end
   end

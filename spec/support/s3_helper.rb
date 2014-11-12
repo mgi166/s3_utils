@@ -1,5 +1,5 @@
 module S3Helper
-  def read_s3_file(path)
+  def read_on_s3(path)
     s3_object(path).read.chomp
   end
 
