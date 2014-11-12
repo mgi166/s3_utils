@@ -15,8 +15,8 @@ module S3Helper
     end
 
     s3_object(path).write(file: @tmp.path)
-    rescue
-    @tmp.close!
+  ensure
+    @tmp.close
   end
 
   def s3_object(path)
