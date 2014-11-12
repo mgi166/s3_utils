@@ -61,7 +61,7 @@ module S3Utils
       g.s3_object.delete
     end
 
-    def create_s3_file(path)
+    def create_on_s3(path)
       @tmp = Tempfile.new('')
       g = Generator.new(path)
 

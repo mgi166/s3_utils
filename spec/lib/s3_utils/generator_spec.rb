@@ -61,8 +61,8 @@ describe S3Utils::Generator do
 
     context 'when the objects exists in s3' do
       before do
-        create_s3_file('s3.bucket.com/fuga/hoge.txt') {|f| f.puts '' }
-        create_s3_file('s3.bucket.com/fuga/fuga.txt') {|f| f.puts '' }
+        create_on_s3('s3.bucket.com/fuga/hoge.txt') {|f| f.puts '' }
+        create_on_s3('s3.bucket.com/fuga/fuga.txt') {|f| f.puts '' }
       end
 
       after do
@@ -86,7 +86,7 @@ describe S3Utils::Generator do
     let(:generator) { S3Utils::Generator.new('s3.bucket.com/fuga') }
 
     before do
-      create_s3_file('s3.bucket.com/fuga/hoge.txt') {|f| f.puts '' }
+      create_on_s3('s3.bucket.com/fuga/hoge.txt') {|f| f.puts '' }
     end
 
     it 'returns the instance of AWS::S3::Tree' do
