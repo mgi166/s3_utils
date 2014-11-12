@@ -24,36 +24,26 @@ module S3Utils
     def download_from_s3(src, dest)
       g = Generator.new(src)
 
-      if File.directory?(dest)
-        if g.s3_object.exists?
-          download_path = File.join(dest, File.basename(src))
-          File.open(download_path, 'w') do |f|
-            g.s3_object.read do |chunk|
-              f.write(chunk)
-            end
-          end
-        else
-          file_objects = g.tree.children(&:reaf?).map(&:object)
-
-          file_objects.each do |obj|
-            next unless obj.exists?
-
-            base_dir = File.basename(File.dirname(obj.key))
-            obj_name = File.basename(obj.key)
-
-            unless File.exist?(File.join(dest, base_dir))
-              Dir.mkdir(File.join(dest, base_dir))
-            end
-
-            File.open(File.join(dest, base_dir, obj_name), 'w') do |f|
-              obj.read { |chunk| f.write(chunk) }
-            end
-          end
+      if g.s3_object.exists?
+        download_path = File.directory?(dest) ? File.join(dest, File.basename(src)) : dest
+        File.open(download_path, 'w') do |f|
+          g.s3_object.read { |chunk| f.write(chunk) }
         end
       else
-        File.open(dest, 'w') do |f|
-          g.s3_object.read do |chunk|
-            f.write(chunk)
+        file_objects = g.tree.children(&:reaf?).map(&:object)
+
+        file_objects.each do |obj|
+          next unless obj.exists?
+
+          base_dir = File.basename(File.dirname(obj.key))
+          obj_name = File.basename(obj.key)
+
+          unless File.exist?(File.join(dest, base_dir))
+            Dir.mkdir(File.join(dest, base_dir))
+          end
+
+          File.open(File.join(dest, base_dir, obj_name), 'w') do |f|
+            obj.read { |chunk| f.write(chunk) }
           end
         end
       end
