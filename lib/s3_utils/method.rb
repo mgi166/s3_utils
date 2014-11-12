@@ -36,6 +36,8 @@ module S3Utils
           file_objects = g.tree.children(&:reaf?).map(&:object)
 
           file_objects.each do |obj|
+            next unless obj.exists?
+
             base_dir = File.basename(File.dirname(obj.key))
             obj_name = File.basename(obj.key)
 
