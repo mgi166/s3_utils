@@ -38,7 +38,7 @@ module S3Utils
           base_dir = File.basename(File.dirname(obj.key))
           obj_name = File.basename(obj.key)
 
-          unless File.exist?(File.join(dest, base_dir))
+          unless Dir.exist?(File.join(dest, base_dir))
             Dir.mkdir(File.join(dest, base_dir))
           end
 
