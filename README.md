@@ -39,9 +39,9 @@ This module has some methods.
    * downloads from the file into local path
 * `#copy_on_s3`
    * copies the file on s3 to other as `FileUtils.cp`
-* `#delete_s3_file`
+* `#delete_on_s3`
    * deletes the file on s3 as `FileUtils.rm`
-* `#create_s3_file`
+* `#create_on_s3`
    * creates the file on s3 as `File.open`
 * `#read_on_s3`
    * read the file on s3 as `File.read`
@@ -67,7 +67,7 @@ require 's3_utils'
 S3Utils.upload_to_s3("path/to/local_file.txt", "s3.bucket.name/path/to/dir/")
 #=> upload to "s3://s3.bucket.name/path/to/dir/local_file.txt"
 
-S3Utils.create_s3_file("s3.bucket.name/path/to/test.txt") do |f|
+S3Utils.create_on_s3("s3.bucket.name/path/to/test.txt") do |f|
   f.puts "This is the sample text"
 end
 #=> create the file "s3.bucket.name/path/to/test.txt" that has contents "This is the sample text"
@@ -107,23 +107,23 @@ S3Utils.copy_on_s3('s3.bucket.com/path/to/source.txt', 's3.bucket.com/path/to/de
 #=> Copy from "s3.bucket.com/path/to/source.txt" to "s3.bucket.com/path/to/dest.txt"
 ```
 
-### delete_s3_file
+### delete_on_s3
 Delete the file in s3.  
 
 ```ruby
-S3Utils.delete_s3_file('s3.bucket.com/path/to/source.txt')
+S3Utils.delete_on_s3('s3.bucket.com/path/to/source.txt')
 #=> Delete "s3.bucket.com/path/to/source.txt"
 ```
 
-### create_s3_file
+### create_on_s3
 Create the file in s3.  
 If block given, it will be passed the File object and uploads to s3.
 
 ```ruby
-S3Utils.create_s3_file('s3.bucket.com/path/to/file.txt')
+S3Utils.create_on_s3('s3.bucket.com/path/to/file.txt')
 #=> Create "s3.bucket.com/path/to/source.txt" but it is empty file
 
-S3Utils.create_s3_file('s3.bucket.com/path/to/file.txt') do |f|
+S3Utils.create_on_s3('s3.bucket.com/path/to/file.txt') do |f|
   f.puts "the file in s3"
 end
 #=> Create "s3.bucket.com/path/to/source.txt" and it has the contents "the file in s3"
