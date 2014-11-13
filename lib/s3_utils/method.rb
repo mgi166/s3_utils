@@ -2,6 +2,10 @@ require 'tempfile'
 
 module S3Utils
   module Method
+    def self.included(klass)
+      klass.extend(self)
+    end
+
     def upload_to_s3(src, dest)
       g = Generator.new(dest)
 

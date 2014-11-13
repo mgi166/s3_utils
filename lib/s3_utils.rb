@@ -5,5 +5,4 @@ require 's3_utils/method'
 
 module S3Utils
   include Method
-  extend  Method
 end
