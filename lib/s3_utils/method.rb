@@ -1,7 +1,10 @@
 require 'tempfile'
+require 's3_utils/action'
 
 module S3Utils
   module Method
+    include Action
+
     def self.included(klass)
       klass.extend(self)
     end
@@ -30,7 +33,7 @@ module S3Utils
 
       if g.s3_object.exists?
         download_path = File.directory?(dest) ? File.join(dest, File.basename(src)) : dest
-        File.open(download_path, 'w') do |f|
+        create_file(download_path) do |f|
           g.s3_object.read { |chunk| f.write(chunk) }
         end
       else
@@ -42,11 +45,7 @@ module S3Utils
           base_dir = File.basename(File.dirname(obj.key))
           obj_name = File.basename(obj.key)
 
-          unless Dir.exist?(File.join(dest, base_dir))
-            Dir.mkdir(File.join(dest, base_dir))
-          end
-
-          File.open(File.join(dest, base_dir, obj_name), 'w') do |f|
+          create_file(File.join(dest, base_dir, obj_name)) do |f|
             obj.read { |chunk| f.write(chunk) }
           end
         end
