@@ -11,18 +11,19 @@ module S3Utils
 
     def upload_to_s3(src, dest)
       g = Generator.new(dest)
+      p = Pathname.new(src)
 
       case
       when File.file?(src)
         filename = File.basename(src.to_s) if dest.to_s.end_with?('/')
         g.s3_object(filename).write(file: src)
       when File.directory?(src)
-        Dir[File.join(src, '**', '*')].each do |path|
-          next if File.directory?(path)
-          g.s3_object(path).write(file: path)
+        Pathname.glob(p.join('**/*')).each do |path|
+          next if path.directory?
+          g.s3_object(path.to_s).write(file: path)
         end
       else
-        Dir[src].each do |path|
+        Pathname.glob(p).each do |path|
           g.s3_object(path).write(file: path)
         end
       end
